@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block body %}  
+<div class="row" style="margin-top: 50px">
+  <div class="col-lg-6">
+    <form method="post" action=".">{% csrf_token %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}"><strong>{{ message.tags }}! </strong>: {{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="input-group">      
+      <input type="text" class="form-control" placeholder="item text... " name="item">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Add Item!</button>
+      </span>      
+    </div><!-- /input-group -->
+    </form>
+  </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+<hr> 
+<table class="table table-bordered">
+  <thead><tr><th>#</th><th>Description</th><th>Total Votes</th><th></th><th></th></tr></thead>
+  {% for item in items %}
+  <tr>
+    <th scope="row">{{forloop.counter}}</th><td>{{item.title}}</td>
+    <td><span class="v{{ item.id}} label label-default">{{ item.vcount}}</span></td>
+    <td>      
+      <a class='btn btn-xs {%if item.voted == 'u' %}btn-warning{%else%}btn-default{%endif%}' href="{% url 'vote_item' %}?item={{ item.id }}&t=u"> 
+        <span class="glyphicon glyphicon-chevron-up"></span>
+      </a>
+      <a class='btn btn-xs {%if item.voted == 'd' %}btn-warning{%else%}btn-default{%endif%}' href="{% url 'vote_item' %}?item={{ item.id }}&t=d"> 
+        <span class="glyphicon glyphicon-chevron-down"></span>
+      </a> 
+    </td>
+    <td><a class='btn btn-xs btn-danger' href="{% url 'delete_item' item.id %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+  </tr>
+  {% endfor %}        
+</table>
+{% endblock %}
