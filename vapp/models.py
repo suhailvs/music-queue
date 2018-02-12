@@ -7,8 +7,8 @@ class Item(models.Model):
         return self.title
 
 class Vote(models.Model):
-    item = models.ForeignKey("Item",related_name='votes')
-    user = models.ForeignKey(User)
+    item = models.ForeignKey("Item",related_name='votes',on_delete=models.CASCADE,)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,) 
     CHOICES = (('u', 'up'),('d', 'down'),)
     flag = models.CharField(max_length=1, choices=CHOICES)
 
